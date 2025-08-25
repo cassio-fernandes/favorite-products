@@ -10,8 +10,11 @@ migrate:
 checkmigrations:
 	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) migrate --check
 
+run-build:
+	$(DOCKER_COMPOSE) up -d --build
+
 run:
-	$(DOCKER_COMPOSE) up -d
+	$(DOCKER_COMPOSE) up -d --force-recreate
 
 stop:
 	$(DOCKER_COMPOSE) down
