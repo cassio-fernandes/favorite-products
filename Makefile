@@ -5,10 +5,10 @@ migrations:
 	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) makemigrations
 
 migrate:
-	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) migrate
+	$(DOCKER_COMPOSE) run --rm -it $(WEB_SERVICE) migrate
 
 checkmigrations:
-	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) migrate --check
+	$(DOCKER_COMPOSE) run --rm -it $(WEB_SERVICE) migrate --check
 
 run-build:
 	$(DOCKER_COMPOSE) up -d --build
@@ -20,7 +20,7 @@ stop:
 	$(DOCKER_COMPOSE) down
 
 createsuperuser:
-	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) createsuperuser
+	$(DOCKER_COMPOSE) run --rm -it $(WEB_SERVICE) createsuperuser
 
 logs:
 	$(DOCKER_COMPOSE) logs -f $(WEB_SERVICE)
