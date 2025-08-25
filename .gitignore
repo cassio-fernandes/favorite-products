@@ -3,6 +3,10 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+core/__pycache__/
+favorites/__pycache__/
+clients/__pycache__/
+
 # C extensions
 *.so
 
@@ -135,7 +139,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+.docker/.env
 .envrc
 .venv
 env/
