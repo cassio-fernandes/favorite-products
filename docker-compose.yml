@@ -1,0 +1,41 @@
+services:
+  app:
+    build:
+      context: .
+      target: dev
+    container_name: favorite_products
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    env_file:
+      - .docker/.env
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    env_file:
+      - .docker/.env
+    volumes:
+#      - .docker/scripts/setup_db.sql:/docker-entrypoint-initdb.d/setup_db.sql
+      - postgres:/data/postgres
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "5000:80"
+    env_file:
+      - .docker/.env
+    depends_on:
+      - postgres
+
+volumes:
+  postgres:
+
+networks:
+  default:
+    driver: bridge

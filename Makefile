@@ -1,0 +1,23 @@
+DOCKER_COMPOSE := docker compose
+WEB_SERVICE := app
+
+migrations:
+	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) makemigrations
+
+migrate:
+	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) migrate
+
+checkmigrations:
+	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) migrate --check
+
+run:
+	$(DOCKER_COMPOSE) up -d
+
+stop:
+	$(DOCKER_COMPOSE) down
+
+createsuperuser:
+	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) createsuperuser
+
+logs:
+	$(DOCKER_COMPOSE) logs -f $(WEB_SERVICE)

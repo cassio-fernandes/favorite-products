@@ -3,6 +3,8 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+.idea
+
 core/__pycache__/
 favorites/__pycache__/
 clients/__pycache__/
