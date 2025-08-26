@@ -1,8 +1,10 @@
-DOCKER_COMPOSE := docker compose
-WEB_SERVICE := app
+DOCKER_COMPOSE=docker compose
+WEB_SERVICE=app
+DJANGO_APP=
+MIGRATION_NAME=
 
 migrations:
-	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) makemigrations
+	$(DOCKER_COMPOSE) run --rm $(WEB_SERVICE) makemigrations ${DJANGO_APP} -n ${MIGRATION_NAME}
 
 migrate:
 	$(DOCKER_COMPOSE) run --rm -it $(WEB_SERVICE) migrate
