@@ -1,8 +1,10 @@
+import logging
 import os
 
 import requests
 from django.core.cache import cache
 from core.settings import CACHE_TTL
+from favorites.serializers import ListProductSerializer
 
 
 class ProductService:
@@ -24,7 +26,10 @@ class ProductService:
 
     @classmethod
     def get_product(cls, product_id):
-        response = requests.get(f"{cls.BASE_URL}/{product_id}/")
+        response = requests.get(f"{cls.BASE_URL}/products/{product_id}/")
         if response.status_code == 200:
-            return response.json()
+            serializer = ListProductSerializer(data=response.json())
+            serializer.is_valid(raise_exception=True)
+
+            return serializer.data
         return None

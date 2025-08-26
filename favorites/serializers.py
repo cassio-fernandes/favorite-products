@@ -8,3 +8,16 @@ class ProductSerializer(serializers.Serializer):
     description = serializers.CharField(allow_blank=True, required=False)
     category = serializers.CharField()
     image = serializers.CharField()
+
+
+class RatingSerializer(serializers.Serializer):
+    rate = serializers.FloatField()
+    count = serializers.IntegerField()
+
+
+class ListProductSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+    price = serializers.FloatField()
+    image = serializers.CharField()
+    rating = RatingSerializer(required=False)

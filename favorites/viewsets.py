@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
@@ -35,7 +36,8 @@ class ProductViewSet(viewsets.ViewSet):
 
 
 class FavoriteProductsViewSet(viewsets.ViewSet):
-    #
+    CACHE_TIMEOUT = 60 * 60 * 24
+
     @action(detail=False, methods=['get'])
     def available(self, request):
         products = ProductService.list_products()
@@ -47,8 +49,35 @@ class FavoriteProductsViewSet(viewsets.ViewSet):
         product_ids = request.data.get('product_ids', [])
 
         created = []
+        favorites = []
         for _id in product_ids:
             marked_favorite, _ = FavoriteProducts.objects.get_or_create(client=client, product_id=_id)
             created.append(marked_favorite.id)
+            product = ProductService.get_product(_id)
+            if product:
+                favorites.append(product)
+
+        client_favorite_products = cache.get(self.__cache_key(client.id), [])
+        favorite_products = {product['id']: product for product in client_favorite_products + favorites}
+        cache.set(self.__cache_key(client.id), list(favorite_products.values()), self.CACHE_TIMEOUT)
 
         return Response({"favorite_products": created}, status=status.HTTP_201_CREATED)
+
+    def list(self, request):
+        client = request.user.client
+        favorites = cache.get(self.__cache_key(client.id))
+
+        if not favorites:
+            product_ids = FavoriteProducts.objects.filter(client=client).values_list("product_id", flat=True)
+            favorites = []
+            for _id in product_ids:
+                product = ProductService.get_product(_id)
+                if product:
+                    favorites.append(product)
+            cache.set(self.__cache_key(client.id), favorites, self.CACHE_TIMEOUT)
+
+        return Response(favorites)
+
+    @staticmethod
+    def __cache_key(client_id):
+        return f"favorite_products:{client_id}"
