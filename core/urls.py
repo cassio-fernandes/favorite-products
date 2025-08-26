@@ -24,6 +24,7 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path("aiqfome/v1/login/", obtain_auth_token),
     path('aiqfome/v1/', include('clients.urls')),
+    path('aiqfome/v1/', include('favorites.urls')),
     path('aiqfome/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('aiqfome/v1/refresh/', TokenRefreshView.as_view(), name='token_refresh')
 ]
