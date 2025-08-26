@@ -18,11 +18,12 @@ class ClientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Client
-        fields = ["name", "email", "password"]
+        fields = ["id", "name", "email", "password"]
 
     def create(self, validated_data):
-        email = validated_data.pop("email")
-        user = User(username=email, email=email, first_name=validated_data.pop("name"))
+        user_data = validated_data.pop("user")
+        email = user_data.pop("email")
+        user = User(username=email, email=email, first_name=user_data.pop("first_name"))
         user.set_password(validated_data.pop("password"))
 
         try:
